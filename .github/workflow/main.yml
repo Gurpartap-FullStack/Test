@@ -1,0 +1,37 @@
+name: CI Pipeline
+
+on :
+ pull_request :
+   branches :
+     - main
+
+jobs :
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '15'
+
+      - name: Install dependecies
+        run: npm Install
+
+      - name: Install Prettier
+        run: npm Install -g Prettier
+
+      - name: Run Prettier and auto-fix issues
+        run: prettier --write "./src/"
+
+      - name: Run linter
+        run: npm run linter
+
+      - name: Run tests
+        run: CI=true npm run tests
+
+      - name: Build project
+        run: npm run build   
